@@ -144,9 +144,16 @@ public class YourHostModule : AbpModule
 }
 ```
 
-### 3. Middleware Configuration
+### 3. Authentication Configuration
 
-Add the following configuration to the `OnApplicationInitializationAsync` method of your `*.HttpApi.Host` or `*.Web` project:
+The API Key authentication is automatically configured when you add the `AbpApiKeyManagementAspNetCoreModule` dependency. No additional middleware configuration is required.
+
+The module automatically:
+- Registers the API Key authentication scheme
+- Configures API Key resolvers for headers and query parameters
+- Sets up authorization policies
+
+Make sure your application has the standard ABP authentication/authorization middleware pipeline:
 
 ```csharp
 public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
@@ -156,9 +163,8 @@ public async override Task OnApplicationInitializationAsync(ApplicationInitializ
     
     // ... other middlewares
     
-    app.UseAuthentication();
-    app.UseApiKeyAuthentication(); // Add API Key authentication
-    app.UseAuthorization();
+    app.UseAuthentication(); // Standard ABP authentication
+    app.UseAuthorization();  // Standard ABP authorization
     
     // ... other middlewares
 }
@@ -188,27 +194,52 @@ dotnet ef database update
 
 ### 6. Optional Configurations
 
-**Via appsettings.json:**
-```json
-{
-  "ApiKeyManagement": {
-    "DefaultPrefixLength": 8,
-    "DefaultKeyLength": 32
-  }
-}
-```
+#### API Key Generation Options
 
-**Via Code:**
+Configure how API Keys are generated:
+
 ```csharp
 public override void ConfigureServices(ServiceConfigurationContext context)
 {
     Configure<ApiKeyCreateOption>(options =>
     {
-        options.PrefixLength = 8;
-        options.KeyLength = 32;
+        options.PrefixLength = 16; // Default: 16 characters
+        
+        // Custom prefix generator (optional)
+        options.PrefixGenerator = context => Task.FromResult("myapp_" + Guid.NewGuid().ToString("N")[..10]);
+        
+        // Custom key generator (optional)
+        options.KeyGenerator = context => Task.FromResult(Guid.NewGuid().ToString("N") + Guid.NewGuid().ToString("N"));
     });
 }
 ```
+
+#### API Key Resolution Options
+
+Configure how API Keys are resolved from HTTP requests:
+
+```csharp
+public override void ConfigureServices(ServiceConfigurationContext context)
+{
+    Configure<ApiKeyResolveOptions>(options =>
+    {
+        // Clear default resolvers if needed
+        options.ApiKeyResolvers.Clear();
+        
+        // Add custom header resolvers
+        options.ApiKeyResolvers.Add(new HeaderApiKeyResolveContributor("Authorization"));
+        options.ApiKeyResolvers.Add(new HeaderApiKeyResolveContributor("X-Custom-Key"));
+        
+        // Add custom query parameter resolvers
+        options.ApiKeyResolvers.Add(new QueryApiKeyResolveContributor("token"));
+        options.ApiKeyResolvers.Add(new QueryApiKeyResolveContributor("key"));
+    });
+}
+```
+
+**Default API Key Resolvers:**
+- Headers: `X-Api-Key`, `Api-Key`
+- Query Parameters: `apiKey`, `api_key`, `X-Api-Key`, `Api-Key`
 
 ## 📖 Usage
 
@@ -227,6 +258,7 @@ Users can create new API Keys through the web interface:
    - **Active**: Whether the API Key is active
 
 ![Created API Key](docs/images/created.png)
+![Copy Message](docs/images/copy-message.png)
 
 ### Permission Management
 
@@ -252,8 +284,6 @@ X-Api-Key: your-api-key-here
 ```http
 GET /api/your-endpoint?apiKey=your-api-key-here
 ```
-
-![Copy Message](docs/images/copy-message.png)
 
 ## 🔒 Security
 
