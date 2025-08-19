@@ -63,8 +63,12 @@
       "folder": "src"
     },
     "Abp.ApiKeyManagement.Installer": {
-       "path": "src/Abp.ApiKeyManagement.Installer/Abp.ApiKeyManagement.Installer.abppkg",
-       "folder": "src"
+      "path": "src/Abp.ApiKeyManagement.Installer/Abp.ApiKeyManagement.Installer.abppkg",
+      "folder": "src"
+    },
+    "Abp.ApiKeyManagement.AspNetCore": {
+      "path": "src/Abp.ApiKeyManagement.AspNetCore/Abp.ApiKeyManagement.AspNetCore.abppkg",
+      "folder": "src"
     }
   }
 }

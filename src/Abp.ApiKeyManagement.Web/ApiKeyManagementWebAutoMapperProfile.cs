@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using Abp.ApiKeyManagement.ApiKeys;
+using Abp.ApiKeyManagement.Web.Pages.ApiKeyManagement;
+using AutoMapper;
 
 namespace Abp.ApiKeyManagement.Web;
 
@@ -6,8 +8,8 @@ public class ApiKeyManagementWebAutoMapperProfile : Profile
 {
     public ApiKeyManagementWebAutoMapperProfile()
     {
-        /* You can configure your AutoMapper mapping configuration here.
-         * Alternatively, you can split your mapping configurations
-         * into multiple profile classes for a better organization. */
+        CreateMap<CreateModal.CreateApiKeyViewModel, CreateApiKeyDto>();
+        CreateMap<EditModal.EditApiKeyViewModel, UpdateApiKeyDto>();
+        CreateMap<ApiKeyDto, EditModal.EditApiKeyViewModel>();
     }
 }

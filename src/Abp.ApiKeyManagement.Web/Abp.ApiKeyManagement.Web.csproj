@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Abp.ApiKeyManagement.Application.Contracts\Abp.ApiKeyManagement.Application.Contracts.csproj" />
+    <ProjectReference Include="..\Abp.ApiKeyManagement.AspNetCore\Abp.ApiKeyManagement.AspNetCore.csproj" />
   </ItemGroup>
 
   <ItemGroup>

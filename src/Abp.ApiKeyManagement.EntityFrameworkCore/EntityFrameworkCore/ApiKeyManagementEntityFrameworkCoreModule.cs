@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Abp.ApiKeyManagement.ApiKeys;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 
@@ -16,9 +17,7 @@ public class ApiKeyManagementEntityFrameworkCoreModule : AbpModule
         {
             options.AddDefaultRepositories<IApiKeyManagementDbContext>(includeAllEntities: true);
             
-            /* Add custom repositories here. Example:
-            * options.AddRepository<Question, EfCoreQuestionRepository>();
-            */
+            options.AddRepository<ApiKey, EfCoreApiKeyRepository>();
         });
     }
 }

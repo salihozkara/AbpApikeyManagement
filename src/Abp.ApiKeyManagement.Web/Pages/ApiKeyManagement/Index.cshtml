@@ -1,11 +1,44 @@
 ﻿@page
 @using Microsoft.Extensions.Localization
 @using Abp.ApiKeyManagement.Localization
+@using Abp.ApiKeyManagement.Web.Menus
 @using Abp.ApiKeyManagement.Web.Pages.ApiKeyManagement
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Shared.Components.AbpPageToolbar
 @model Abp.ApiKeyManagement.Web.Pages.ApiKeyManagement.IndexModel
 @inject IStringLocalizer<ApiKeyManagementResource> L
+@inject IPageLayout PageLayout
 
 @{
+    PageLayout.Content.Title = L["ApiKeys"].Value;
+    PageLayout.Content.MenuItemName = ApiKeyManagementMenus.ApiKeyManagement;
 }
-<h1>ApiKeyManagement</h1>
-<p>@L["SamplePageMessage"]</p>
+
+
+@section styles {
+    <abp-style-bundle name="@typeof(IndexModel).FullName">
+        <abp-style src="/Pages/AbpPermissionManagement/permission-management-modal.css" />
+    </abp-style-bundle>
+}
+@section scripts {
+    <abp-script-bundle name="@typeof(IndexModel).FullName">
+        <abp-script src="/Pages/AbpPermissionManagement/permission-management-modal.js" />
+        <abp-script src="/Pages/ApiKeyManagement/Index.cshtml.js" />
+    </abp-script-bundle>
+}
+
+<abp-card id="ApiKeysWrapper">
+    <abp-card-header>
+        <abp-row>
+            <abp-column size-md="_6">
+                <abp-card-title>@L["ApiKeys"]</abp-card-title>
+            </abp-column>
+            <abp-column size-md="_6" class="text-end">
+                @await Component.InvokeAsync(typeof(AbpPageToolbarViewComponent), new { pageName = typeof(IndexModel).FullName })
+            </abp-column>
+        </abp-row>
+    </abp-card-header>
+    <abp-card-body>
+        <abp-table striped-rows="true" class="nowrap"></abp-table>
+    </abp-card-body>
+</abp-card>
