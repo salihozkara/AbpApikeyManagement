@@ -1,0 +1,55 @@
+@inherits ApiKeyManagementComponentBase
+
+<div class="skeleton-loader-container" aria-busy="true" aria-label="@L["LoadingData"]" role="status">
+    <table class="table table-hover table-striped">
+        <thead>
+            <tr>
+                <th style="width: 10%">
+                    <div class="skeleton-cell skeleton-shimmer"></div>
+                </th>
+                <th style="width: 20%">
+                    <div class="skeleton-cell skeleton-shimmer"></div>
+                </th>
+                <th style="width: 30%">
+                    <div class="skeleton-cell skeleton-shimmer"></div>
+                </th>
+                <th style="width: 15%">
+                    <div class="skeleton-cell skeleton-shimmer"></div>
+                </th>
+                <th style="width: 10%">
+                    <div class="skeleton-cell skeleton-shimmer"></div>
+                </th>
+                <th style="width: 15%">
+                    <div class="skeleton-cell skeleton-shimmer"></div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (var i = 0; i < Rows; i++)
+            {
+                var delay = i * 50; // Stagger animation for visual effect
+                <tr>
+                    <td>
+                        <div class="skeleton-cell skeleton-shimmer" style="animation-delay: @(delay)ms"></div>
+                    </td>
+                    <td>
+                        <div class="skeleton-cell skeleton-shimmer" style="animation-delay: @(delay)ms; width: 80%"></div>
+                    </td>
+                    <td>
+                        <div class="skeleton-cell skeleton-shimmer" style="animation-delay: @(delay)ms; width: 90%"></div>
+                    </td>
+                    <td>
+                        <div class="skeleton-cell skeleton-shimmer" style="animation-delay: @(delay)ms; width: 60%"></div>
+                    </td>
+                    <td>
+                        <div class="skeleton-cell skeleton-shimmer skeleton-badge" style="animation-delay: @(delay)ms; width: 70%"></div>
+                    </td>
+                    <td>
+                        <div class="skeleton-cell skeleton-shimmer" style="animation-delay: @(delay)ms; width: 85%"></div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <span class="visually-hidden">@L["LoadingData"]</span>
+</div>

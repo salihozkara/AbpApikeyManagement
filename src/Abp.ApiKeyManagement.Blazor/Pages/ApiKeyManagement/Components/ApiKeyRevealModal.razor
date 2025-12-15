@@ -1,0 +1,84 @@
+@using Microsoft.JSInterop
+@inject IJSRuntime JS
+@inherits ApiKeyManagementComponentBase
+
+<Modal @ref="ModalRef" Closing="@OnModalClosing" aria-modal="true">
+    <ModalContent Size="ModalSize.Large" Centered="true">
+        <ModalHeader>
+            <ModalTitle id="reveal-modal-title">
+                <Icon Name="IconName.Shield" IconSize="IconSize.x2" TextColor="TextColor.Success" aria-hidden="true" />
+                @L["ApiKey"]
+            </ModalTitle>
+        </ModalHeader>
+        <ModalBody aria-labelledby="reveal-modal-title">
+            <!-- Security Warning -->
+            <Alert Color="Color.Warning" Visible="true" Margin="Margin.Is4.OnY">
+                <Heading Size="HeadingSize.Is5">
+                    <Icon Name="IconName.ExclamationTriangle" /> @L["SaveThisKey"]
+                </Heading>
+                <Paragraph Margin="Margin.Is0">@L["ApiKeySecurityNotice"]</Paragraph>
+            </Alert>
+
+            <!-- API Key Display -->
+            <Field>
+                <FieldLabel>@L["YourApiKey"]</FieldLabel>
+                <FieldBody>
+                    <Addons>
+                        <Addon AddonType="AddonType.Body">
+                            <TextEdit @ref="KeyInputRef"
+                                      Text="@ApiKey"
+                                      ReadOnly="true"
+                                      Style="font-family: 'Courier New', Courier, monospace; font-size: 1.1rem; font-weight: 500; letter-spacing: 0.5px; background-color: #f8f9fa; border: 2px solid #dee2e6;"
+                                      ElementId="apiKeyInput" />
+                        </Addon>
+                        <Addon AddonType="AddonType.End">
+                            <Button Color="@(Copied ? Color.Success : Color.Primary)"
+                                    Clicked="CopyToClipboardAsync"
+                                    Size="Size.Large"
+                                    aria-label="@(Copied ? L["ApiKeyCopied"] : L["Copy"])"
+                                    Tooltip="@L["Copy"]">
+                                <Icon Name="@(Copied ? IconName.Check : IconName.Copy)" aria-hidden="true" />
+                                @(Copied ? L["Copied"] : L["Copy"])
+                            </Button>
+                        </Addon>
+                    </Addons>
+                </FieldBody>
+            </Field>
+
+            <!-- Visual Confirmation -->
+            @if (Copied)
+            {
+                <Alert Color="Color.Success" Visible="true" Margin="Margin.Is3.FromTop" role="status" aria-live="polite">
+                    <Icon Name="IconName.CheckCircle" aria-hidden="true" />
+                    <strong>@L["ApiKeyCopied"]</strong>
+                </Alert>
+            }
+
+            <!-- Key Information Card -->
+            <Card Margin="Margin.Is4.FromTop" Border="Border.Primary">
+                <CardBody>
+                    <Heading Size="HeadingSize.Is6" Margin="Margin.Is2.FromBottom">
+                        <Icon Name="IconName.InfoCircle" TextColor="TextColor.Primary" />
+                        @L["NextSteps"]
+                    </Heading>
+                    <UnorderedList>
+                        <UnorderedListItem>@L["NextStep1"]</UnorderedListItem>
+                        <UnorderedListItem>@L["NextStep2"]</UnorderedListItem>
+                        <UnorderedListItem>@L["NextStep3"]</UnorderedListItem>
+                    </UnorderedList>
+                </CardBody>
+            </Card>
+        </ModalBody>
+        <ModalFooter>
+            <Check TValue="bool" @bind-Checked="@UserAcknowledged" Disabled="@(!Copied)">
+                @L["IHaveCopiedTheKey"]
+            </Check>
+            <Button Color="Color.Secondary"
+                    Clicked="CloseAsync"
+                    Disabled="@(!UserAcknowledged)"
+                    Margin="Margin.Is2.FromStart">
+                @L["Close"]
+            </Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>

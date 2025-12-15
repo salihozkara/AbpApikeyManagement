@@ -18,7 +18,9 @@ public class ApiKeyManagementDomainModule : AbpModule
         Configure<PermissionManagementOptions>(options =>
         {
             options.ManagementProviders.Add<ApiKeyPermissionManagementProvider>();
-            options.ProviderPolicies[ApiKeyPermissionValueProvider.ProviderName] = "apiKeyManagement";
+            // Map provider to the permission required to manage API key permissions
+            // Corresponds to ApiKeyManagementPermissions.ApiKeys.ManagePermissions constant
+            options.ProviderPolicies[ApiKeyPermissionValueProvider.ProviderName] = "ApiKeyManagement.ApiKeys.ManagePermissions";
         });
     }
 

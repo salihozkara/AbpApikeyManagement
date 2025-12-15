@@ -69,6 +69,18 @@
     "Abp.ApiKeyManagement.AspNetCore": {
       "path": "src/Abp.ApiKeyManagement.AspNetCore/Abp.ApiKeyManagement.AspNetCore.abppkg",
       "folder": "src"
+    },
+    "Abp.ApiKeyManagement.Blazor": {
+      "path": "src/Abp.ApiKeyManagement.Blazor/Abp.ApiKeyManagement.Blazor.abppkg",
+      "folder": "src"
+    },
+    "Abp.ApiKeyManagement.Blazor.Server": {
+      "path": "src/Abp.ApiKeyManagement.Blazor/Abp.ApiKeyManagement.Blazor.Server.abppkg",
+      "folder": "src"
+    },
+    "Abp.ApiKeyManagement.Blazor.WebAssembly": {
+      "path": "src/Abp.ApiKeyManagement.Blazor.WebAssembly/Abp.ApiKeyManagement.Blazor.WebAssembly.abppkg",
+      "folder": "src"
     }
   }
 }

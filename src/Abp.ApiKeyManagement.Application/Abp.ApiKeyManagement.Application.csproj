@@ -12,7 +12,11 @@
     <PackageReference Include="Volo.Abp.Mapperly" Version="10.0.0" />
     <PackageReference Include="Volo.Abp.Ddd.Application" Version="10.0.0" />
     <PackageReference Include="Volo.Abp.PermissionManagement.Application" Version="10.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Abp.ApiKeyManagement.Application.Contracts\Abp.ApiKeyManagement.Application.Contracts.csproj" />
+    <ProjectReference Include="..\Abp.ApiKeyManagement.AspNetCore\Abp.ApiKeyManagement.AspNetCore.csproj" />
     <ProjectReference Include="..\Abp.ApiKeyManagement.Domain\Abp.ApiKeyManagement.Domain.csproj" />
   </ItemGroup>
 

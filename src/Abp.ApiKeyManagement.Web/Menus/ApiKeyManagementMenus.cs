@@ -1,9 +1,8 @@
 ﻿namespace Abp.ApiKeyManagement.Web.Menus;
 
-public class ApiKeyManagementMenus
+public static class ApiKeyManagementMenus
 {
-    public const string Prefix = "ApiKeyManagement";
+    private const string Prefix = "ApiKeyManagement";
 
-    public const string ApiKeyManagement = Prefix + ".ApiKeyManagement";
-
+    public const string ApiKeys = Prefix + ".ApiKeys";
 }

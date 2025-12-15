@@ -1,0 +1,22 @@
+@inherits ApiKeyManagementComponentBase
+
+<Badge Color="@GetChipColor()"
+       Class="filter-chip me-2 mb-2"
+       aria-label="@($"{L["Filter"]}: {Label}. {L["ClickToRemove"]}")">
+    <span class="filter-chip-label">
+        <Icon Name="@GetChipIcon()" IconSize="IconSize.Small" aria-hidden="true" />
+        <span class="ms-1">@Label</span>
+        @if (!string.IsNullOrEmpty(Value))
+        {
+            <span class="filter-chip-value">: @Value</span>
+        }
+    </span>
+    <Button Color="Color.Link"
+            Size="Size.Small"
+            Class="filter-chip-remove"
+            Clicked="OnRemoveClicked"
+            aria-label="@($"{L["Remove"]} {Label} {L["Filter"]}")"
+            Tooltip="@L["RemoveFilter"]">
+        <Icon Name="IconName.Times" IconSize="IconSize.Small" aria-hidden="true" />
+    </Button>
+</Badge>

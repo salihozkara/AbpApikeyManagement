@@ -1,7 +1,77 @@
 {
   "culture": "pl-PL",
   "texts": {
-    "MyAccount": "Moje konto",
-    "SamplePageMessage": "Przykładowa strona modułu ApiKeyManagement"
+    "LoadingPermissions": "Ładowanie uprawnień...",
+    "NoPermissionsAvailable": "Brak Dostępnych Uprawnień",
+    "NoPermissionsAvailableDescription": "Ten klucz API nie ma żadnych dostępnych uprawnień do konfiguracji",
+    "NoPermissionsInGroup": "Brak uprawnień w tej grupie",
+    "GrantedByOtherProvider": "Przyznane przez użytkownika",
+    "PermissionsSavedSuccessfully": "Uprawnienia zapisane pomyślnie",
+    "UnsavedChanges": "Niezapisane Zmiany",
+    "UnsavedChangesConfirmationMessage": "Masz niezapisane zmiany uprawnień. Czy na pewno chcesz zamknąć bez zapisywania?",
+    "InvalidApiKeyId": "Nieprawidłowy identyfikator klucza API",
+
+    "ApiKeysManagement": "Zarządzanie Kluczami API",
+    "SearchApiKeys": "Wyszukaj klucze API po nazwie lub opisie",
+    "OpenNewApiKeyModal": "Otwórz modal nowego klucza API",
+    "FocusSearchShortcut": "Naciśnij Ctrl+K aby skoncentrować wyszukiwanie (Windows) lub Cmd+K (Mac)",
+    "SearchTooltip": "Wyszukaj klucze API",
+    "NewApiKeyTooltip": "Utwórz nowy klucz API",
+
+    "ActionsColumn": "Dostępne akcje dla tego klucza API",
+    "EditApiKeyTooltip": "Edytuj ustawienia klucza API",
+    "ManagePermissionsTooltip": "Zarządzaj uprawnieniami klucza API",
+    "DeleteApiKeyTooltip": "Usuń ten klucz API na stałe",
+
+    "ActiveStatusTooltip": "Ten klucz jest aktywny i może być używany do uwierzytelniania API",
+    "InactiveStatusTooltip": "Ten klucz jest nieaktywny i nie może być używany do uwierzytelniania",
+    "ExpiredStatusTooltip": "Ten klucz wygasł i nie może być używany",
+    "ExpiresSoonStatusTooltip": "Ten klucz wkrótce wygaśnie (w ciągu 7 dni)",
+
+    "CharactersRemaining": "Pozostało {0} znaków",
+    "CharactersExceeded": "Przekroczono maksymalną długość o {0} znaków",
+
+    "FilterAll": "Wszystkie",
+    "FilterActive": "Aktywne",
+    "FilterInactive": "Nieaktywne",
+    "FilterExpired": "Wygasłe",
+    "FilterExpiringSoon": "Wkrótce Wygasną",
+
+    "OneWeekFromNow": "Za 1 tydzień",
+    "OneMonthFromNow": "Za 1 miesiąc",
+    "OneYearFromNow": "Za 1 rok",
+    "NeverExpires": "Nigdy nie wygasa",
+
+    "NameFieldLabel": "Nazwa Klucza API",
+    "DescriptionFieldLabel": "Opis (Opcjonalny)",
+    "IsActiveFieldLabel": "Status Aktywności",
+    "ExpirationTimeFieldLabel": "Data i Czas Wygaśnięcia",
+
+    "FormSaved": "Zmiany zostały zapisane pomyślnie",
+    "FormCancelled": "Zmiany zostały odrzucone",
+    "ValidationErrorsFound": "Proszę poprawić błędy przed zapisaniem",
+
+    "Filter": "Filtr",
+    "ToggleFilters": "Przełącz filtry",
+    "FilterTooltip": "Pokaż lub ukryj opcje filtrowania",
+    "FilterOptions": "Opcje Filtrowania",
+    "StatusFilter": "Status",
+    "ExpirationFilter": "Wygaśnięcie",
+    "ClearDateFilter": "Wyczyść",
+    "ClearAll": "Wyczyść wszystko",
+    "ClearAllFilters": "Wyczyść Wszystkie Filtry",
+    "ActiveFilters": "Aktywne Filtry",
+    "Remove": "Usuń",
+    "RemoveFilter": "Usuń filtr",
+    "ClickToRemove": "Kliknij aby usunąć",
+    "ExpiringBefore": "Wygasające przed",
+    "ExpiringAfter": "Wygasające po",
+    "ShowingFiltered": "Pokazywanie przefiltrowanych wyników",
+
+    "ToggleActiveStatus": "Przełącz status aktywności",
+    "ToggleStatusFor": "Przełącz status aktywności dla {0}",
+    "ApiKeyStatusUpdated": "Klucz API '{0}' jest teraz {1}",
+    "ApiKeyActivated": "Klucz API aktywowany pomyślnie",
+    "ApiKeyDeactivated": "Klucz API dezaktywowany pomyślnie"
   }
 }

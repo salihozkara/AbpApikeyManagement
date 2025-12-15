@@ -1,0 +1,374 @@
+/* Scoped CSS for API Key Management Index Page */
+/* Provides smooth transitions and enhanced visual feedback */
+
+/* Button Transitions */
+button {
+    transition: all 0.15s ease-in-out;
+}
+
+button:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+button:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+/* Search Input Focus Enhancement */
+input[type="text"]:focus,
+input[type="search"]:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+/* DataGrid Row Hover Effect */
+tr:hover {
+    background-color: rgba(0, 0, 0, 0.02) !important;
+    transition: background-color 0.1s ease-in-out;
+}
+
+/* Badge Transitions */
+.badge {
+    transition: all 0.2s ease-in-out;
+}
+
+.badge:hover {
+    transform: scale(1.05);
+}
+
+/* Card Shadow Enhancement */
+.card {
+    transition: box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.075);
+}
+
+/* Loading Spinner Animation */
+.spinner-border {
+    animation: spinner-border 0.75s linear infinite;
+}
+
+@keyframes spinner-border {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Focus Visible Enhancement for Keyboard Navigation */
+*:focus-visible {
+    outline: 3px solid #0d6efd;
+    outline-offset: 2px;
+    border-radius: 0.25rem;
+}
+
+/* Remove default focus outline (only when not keyboard navigating) */
+*:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Table Cell Padding Enhancement */
+td {
+    vertical-align: middle !important;
+}
+
+/* Icon Spacing */
+.icon + * {
+    margin-left: 0.5rem;
+}
+
+/* Status Badge Pulse Animation (for Expiring Soon) */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.6;
+    }
+}
+
+.badge-warning {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Empty State Icon Animation */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.empty-state-icon {
+    animation: float 3s ease-in-out infinite;
+}
+
+/* Tooltip Enhancement */
+.tooltip {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.tooltip.show {
+    opacity: 1;
+}
+
+/* Dropdown Menu Slide Animation */
+.dropdown-menu {
+    animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Screen Reader Only Content */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Accessible Skip Link */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: #0d6efd;
+    color: white;
+    padding: 8px;
+    text-decoration: none;
+    z-index: 100;
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+    button {
+        border: 2px solid currentColor;
+    }
+
+    .badge {
+        border: 1px solid currentColor;
+    }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Dark Mode Support (if ABP theme supports it) */
+@media (prefers-color-scheme: dark) {
+    tr:hover {
+        background-color: rgba(255, 255, 255, 0.05) !important;
+    }
+}
+
+/* Filter Panel Animations */
+.filter-panel {
+    animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDownFilter {
+    from {
+        opacity: 0;
+        max-height: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        max-height: 200px;
+        transform: translateY(0);
+    }
+}
+
+/* Active Filters Section */
+.active-filters {
+    animation: fadeIn 0.2s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Filter Chip Styling */
+.filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    transition: all 0.2s ease-in-out;
+    cursor: default;
+}
+
+.filter-chip:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.filter-chip-label {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.875rem;
+}
+
+.filter-chip-value {
+    font-weight: 600;
+    margin-left: 0.25rem;
+}
+
+.filter-chip-remove {
+    padding: 0.125rem 0.25rem !important;
+    margin-left: 0.25rem;
+    border: none !important;
+    background: transparent !important;
+    color: inherit !important;
+    opacity: 0.6;
+    transition: opacity 0.15s ease-in-out, transform 0.15s ease-in-out;
+}
+
+.filter-chip-remove:hover {
+    opacity: 1;
+    transform: scale(1.2);
+    background: transparent !important;
+}
+
+.filter-chip-remove:focus {
+    box-shadow: none !important;
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+}
+
+/* Filter Button Badge */
+.btn .badge {
+    font-size: 0.7rem;
+    padding: 0.2em 0.4em;
+}
+
+/* Skeleton Loader Styles */
+.skeleton-loader-container {
+    min-height: 400px;
+}
+
+.skeleton-cell {
+    height: 16px;
+    border-radius: 4px;
+    background: #f0f0f0;
+    position: relative;
+    overflow: hidden;
+}
+
+.skeleton-badge {
+    height: 24px;
+    border-radius: 12px;
+}
+
+.skeleton-shimmer {
+    background: linear-gradient(
+        90deg,
+        #f0f0f0 0%,
+        #f8f8f8 20%,
+        #f0f0f0 40%,
+        #f0f0f0 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite linear;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* Dark mode skeleton support */
+@media (prefers-color-scheme: dark) {
+    .skeleton-cell {
+        background: #2a2a2a;
+    }
+
+    .skeleton-shimmer {
+        background: linear-gradient(
+            90deg,
+            #2a2a2a 0%,
+            #3a3a3a 20%,
+            #2a2a2a 40%,
+            #2a2a2a 100%
+        );
+        background-size: 200% 100%;
+    }
+}
+
+/* Reduce motion for skeleton */
+@media (prefers-reduced-motion: reduce) {
+    .skeleton-shimmer {
+        animation: none;
+        background: #f0f0f0;
+    }
+}
+
+/* Search Highlight Styling */
+.search-highlight {
+    background-color: #fff3cd;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-weight: 600;
+    color: #856404;
+    box-shadow: 0 0 0 1px #ffeaa7;
+    transition: background-color 0.2s ease-in-out;
+}
+
+/* Dark mode search highlight */
+@media (prefers-color-scheme: dark) {
+    .search-highlight {
+        background-color: #5a4a1e;
+        color: #ffc107;
+        box-shadow: 0 0 0 1px #6a5a2e;
+    }
+}
+
+/* High contrast mode search highlight */
+@media (prefers-contrast: high) {
+    .search-highlight {
+        background-color: #ffeb3b;
+        color: #000;
+        border: 2px solid #000;
+        font-weight: 700;
+    }
+}

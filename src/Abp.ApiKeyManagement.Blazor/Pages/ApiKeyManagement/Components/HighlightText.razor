@@ -1,0 +1,63 @@
+@if (string.IsNullOrWhiteSpace(SearchTerm) || string.IsNullOrWhiteSpace(Text))
+{
+    @((MarkupString)(Text ?? string.Empty))
+}
+else
+{
+    @((MarkupString)GetHighlightedText())
+}
+
+@code {
+    [Parameter]
+    public string? Text { get; set; }
+
+    [Parameter]
+    public string? SearchTerm { get; set; }
+
+    private string GetHighlightedText()
+    {
+        if (string.IsNullOrWhiteSpace(Text) || string.IsNullOrWhiteSpace(SearchTerm))
+        {
+            return Text ?? string.Empty;
+        }
+
+        // Case-insensitive search
+        var index = Text.IndexOf(SearchTerm, StringComparison.OrdinalIgnoreCase);
+
+        if (index < 0)
+        {
+            return System.Web.HttpUtility.HtmlEncode(Text);
+        }
+
+        var result = new System.Text.StringBuilder();
+        var lastIndex = 0;
+
+        while (index >= 0)
+        {
+            // Add text before the match (HTML encoded)
+            if (index > lastIndex)
+            {
+                result.Append(System.Web.HttpUtility.HtmlEncode(Text.Substring(lastIndex, index - lastIndex)));
+            }
+
+            // Add highlighted match (HTML encoded)
+            var matchedText = Text.Substring(index, SearchTerm.Length);
+            result.Append("<mark class=\"search-highlight\">");
+            result.Append(System.Web.HttpUtility.HtmlEncode(matchedText));
+            result.Append("</mark>");
+
+            lastIndex = index + SearchTerm.Length;
+
+            // Find next occurrence
+            index = Text.IndexOf(SearchTerm, lastIndex, StringComparison.OrdinalIgnoreCase);
+        }
+
+        // Add remaining text (HTML encoded)
+        if (lastIndex < Text.Length)
+        {
+            result.Append(System.Web.HttpUtility.HtmlEncode(Text.Substring(lastIndex)));
+        }
+
+        return result.ToString();
+    }
+}

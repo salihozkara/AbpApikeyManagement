@@ -9,7 +9,7 @@ namespace Abp.ApiKeyManagement.ApiKeys;
 
 public class ApiKeyPermissionValueProvider(IPermissionStore permissionStore, IPermissionValueProviderManager permissionValueProviderManager) : PermissionValueProvider(permissionStore)
 {
-    public const string ProviderName = "AK";
+    public const string ProviderName = ApiKeyAuthorizationConsts.PermissionValueProviderName;
     public override string Name => ProviderName;
 
     public override async Task<PermissionGrantResult> CheckAsync(PermissionValueCheckContext context)

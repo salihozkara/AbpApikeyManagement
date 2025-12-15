@@ -1,0 +1,343 @@
+@page "/api-key-management"
+@attribute [Authorize(ApiKeyManagementPermissions.ApiKeys.Default)]
+@using Abp.ApiKeyManagement.ApiKeys
+@using Abp.ApiKeyManagement.Blazor.Pages.ApiKeyManagement.Components
+@using Abp.ApiKeyManagement.Permissions
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@using Volo.Abp.PermissionManagement.Blazor.Components
+@inherits ApiKeyManagementComponentBase
+
+<PageHeader Title="@L["ApiKeys"]" BreadcrumbItems="@BreadcrumbItems" />
+
+<Card role="region" aria-label="@L["ApiKeysManagement"]">
+    <CardHeader>
+        <Row Class="justify-content-between align-items-center mb-3">
+            <Column ColumnSize="ColumnSize.IsAuto">
+                <Heading Size="HeadingSize.Is4" Margin="Margin.Is0">@L["ApiKeysManagement"]</Heading>
+            </Column>
+            <Column ColumnSize="ColumnSize.IsAuto">
+                <div class="d-flex gap-2">
+                    @if (HasCreatePermission)
+                    {
+                        <Button Color="Color.Primary"
+                                Clicked="OpenCreateModalAsync"
+                                aria-label="@L["OpenNewApiKeyModal"]"
+                                Tooltip="@L["NewApiKeyTooltip"]">
+                            <Icon Name="IconName.Add" /> @L["NewApiKey"]
+                        </Button>
+                    }
+                </div>
+            </Column>
+        </Row>
+        
+        <Row Class="justify-content-between align-items-center">
+             <Column ColumnSize="ColumnSize.Is12.OnMobile.Is6.OnDesktop" Class="mb-2 mb-md-0">
+                <Addons>
+                    <Addon AddonType="AddonType.Start">
+                         <Button Color="@(ShowFilterPanel ? Color.Primary : Color.Light)"
+                                Clicked="ToggleFilterPanel"
+                                aria-label="@L["ToggleFilters"]"
+                                aria-expanded="@ShowFilterPanel.ToString().ToLower()"
+                                Tooltip="@L["FilterTooltip"]">
+                            <Icon Name="IconName.Filter" />
+                            @if (ActiveFilterCount > 0)
+                            {
+                                <Badge Color="Color.Danger" Pill="true" Class="ms-1">@ActiveFilterCount</Badge>
+                            }
+                        </Button>
+                    </Addon>
+                    <Addon AddonType="AddonType.Body">
+                        <TextEdit @ref="SearchInputRef"
+                                  @bind-Text="@FilterText"
+                                  Placeholder="@L["SearchPlaceholder"]"
+                                  @oninput="OnSearchTextChanged"
+                                  @onkeydown="HandleSearchKeyDown"
+                                  aria-label="@L["SearchApiKeys"]">
+                        </TextEdit>
+                    </Addon>
+                    <Addon AddonType="AddonType.End">
+                        <Button Color="Color.Primary"
+                                Clicked="SearchAsync"
+                                aria-label="@L["Search"]"
+                                Tooltip="@L["SearchTooltip"]">
+                            <Icon Name="IconName.Search" />
+                        </Button>
+                    </Addon>
+                </Addons>
+            </Column>
+        </Row>
+
+        @if (ShowFilterPanel)
+        {
+            <div class="mt-3 p-4 rounded-3 border shadow-sm bg-white filter-panel" role="region" aria-label="@L["FilterOptions"]">
+                <Row>
+                    <Column ColumnSize="ColumnSize.Is12.OnMobile.Is12.OnDesktop.Is4.OnWidescreen" Class="mb-4 mb-xl-0">
+                        <Field>
+                            <FieldLabel TextColor="TextColor.Secondary" Class="mb-2 small text-uppercase fw-bold">@L["Status"]</FieldLabel>
+                            <Buttons Class="w-100 shadow-sm rounded">
+                                <Button Color="@(FilterIsActive == null ? Color.Primary : Color.Secondary)" 
+                                        Outline="@(FilterIsActive != null)"
+                                        Clicked="@(() => ApplyStatusFilterAsync(null))"
+                                        Class="flex-fill">@L["All"]</Button>
+                                <Button Color="@(FilterIsActive == true ? Color.Primary : Color.Secondary)" 
+                                        Outline="@(FilterIsActive != true)"
+                                        Clicked="@(() => ApplyStatusFilterAsync(true))"
+                                        Class="flex-fill">@L["Active"]</Button>
+                                <Button Color="@(FilterIsActive == false ? Color.Primary : Color.Secondary)" 
+                                        Outline="@(FilterIsActive != false)"
+                                        Clicked="@(() => ApplyStatusFilterAsync(false))"
+                                        Class="flex-fill">@L["Inactive"]</Button>
+                            </Buttons>
+                        </Field>
+                    </Column>
+                    <Column ColumnSize="ColumnSize.Is12.OnMobile.Is12.OnDesktop.Is8.OnWidescreen">
+                         <Field>
+                            <FieldLabel TextColor="TextColor.Secondary" Class="mb-2 small text-uppercase fw-bold">@L["ExpirationDate"]</FieldLabel>
+                            <Div Class="d-flex flex-column flex-md-row gap-2">
+                                <Div Class="flex-fill">
+                                     <DateEdit TValue="DateTimeOffset?" 
+                                               Date="@FilterExpirationFrom" 
+                                               DateChanged="OnExpirationFromChangedAsync"
+                                               Placeholder="@L["From"]" />
+                                </Div>
+                                <Div Class="flex-fill">
+                                    <DateEdit TValue="DateTimeOffset?" 
+                                              Date="@FilterExpirationTo" 
+                                              DateChanged="OnExpirationToChangedAsync"
+                                              Placeholder="@L["To"]" />
+                                </Div>
+                            </Div>
+                            <Div Class="mt-2 d-flex flex-wrap gap-2 align-items-center">
+                                <small class="text-muted text-uppercase fw-bold me-1" style="font-size: 0.7rem;">@L["QuickRanges"]:</small>
+                                <Button Color="Color.Secondary" Outline="true" Size="Size.Small" Shape="Shape.RoundedPill" Clicked="@(() => ApplyDateFilterAsync(7))">@L["Last7Days"]</Button>
+                                <Button Color="Color.Secondary" Outline="true" Size="Size.Small" Shape="Shape.RoundedPill" Clicked="@(() => ApplyDateFilterAsync(30))">@L["Last30Days"]</Button>
+                                <Button Color="Color.Danger" Outline="true" Size="Size.Small" Shape="Shape.RoundedPill" Clicked="@(() => ApplyDateFilterAsync(null))">@L["Clear"]</Button>
+                            </Div>
+                        </Field>
+                    </Column>
+                </Row>
+                <Row Class="mt-3 border-top pt-3">
+                     <Column Class="d-flex justify-content-end">
+                        <Button Color="Color.Light"
+                                Clicked="ClearAllFiltersAsync"
+                                Disabled="@(!HasActiveFilters)"
+                                Size="Size.Small">
+                            @L["ResetAllFilters"]
+                        </Button>
+                    </Column>
+                </Row>
+            </div>
+        }
+
+        @* Active Filter Chips *@
+        @if (HasActiveFilters)
+        {
+            <div class="mt-3 d-flex flex-wrap align-items-center gap-2 active-filters" role="region" aria-label="@L["ActiveFilters"]">
+                <small class="text-muted fw-bold">@L["ActiveFilters"]:</small>
+
+                @if (!string.IsNullOrWhiteSpace(FilterText))
+                {
+                    <FilterChip Label="@L["Search"]"
+                                Value="@FilterText"
+                                Type="FilterChipType.Text"
+                                OnRemove="@(() => RemoveFilterAsync("search"))" />
+                }
+
+                @if (FilterIsActive.HasValue)
+                {
+                    <FilterChip Label="@L["Status"]"
+                                Value="@GetStatusFilterText()"
+                                Type="FilterChipType.Status"
+                                OnRemove="@(() => RemoveFilterAsync("status"))" />
+                }
+
+                @if (FilterExpirationFrom.HasValue || FilterExpirationTo.HasValue)
+                {
+                    <FilterChip Label="@L["ExpirationTime"]"
+                                Value="@GetDateFilterText()"
+                                Type="FilterChipType.Date"
+                                OnRemove="@(() => RemoveFilterAsync("date"))" />
+                }
+
+                <Button Color="Color.Link"
+                        Size="Size.Small"
+                        Clicked="ClearAllFiltersAsync"
+                        aria-label="@L["ClearAllFilters"]"
+                        Class="text-decoration-none">
+                    @L["ClearAll"]
+                </Button>
+            </div>
+        }
+    </CardHeader>
+    <CardBody>
+        <DataGrid TItem="ApiKeyDto"
+                  Data="ApiKeysList"
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  PageSize="@PageSize"
+                  CurrentPage="@CurrentPage"
+                  Sortable="true"
+                  Responsive="true"
+                  Hoverable="true"
+                  Striped="true">
+            <DataGridColumns>
+                <DataGridEntityActionsColumn TItem="ApiKeyDto" Caption="@L["Actions"]">
+                    <DisplayTemplate>
+                        <EntityActions TItem="ApiKeyDto">
+                            <EntityAction TItem="ApiKeyDto"
+                                          Text="@L["Edit"]"
+                                          Visible="HasEditPermission"
+                                          Clicked="() => OpenEditModalAsync(context)" />
+                            <EntityAction TItem="ApiKeyDto"
+                                          Text="@L["Permissions"]"
+                                          Visible="HasManagePermissionsPermission"
+                                          Clicked="() => OpenPermissionModalAsync(context)" />
+                            <EntityAction TItem="ApiKeyDto"
+                                          Text="@L["Delete"]"
+                                          Visible="HasDeletePermission"
+                                          Clicked="() => DeleteApiKeyAsync(context)"
+                                          ConfirmationMessage="@(() => string.Format(L["ApiKeyDeletionConfirmationMessage"], context.Name))" />
+                        </EntityActions>
+                    </DisplayTemplate>
+                </DataGridEntityActionsColumn>
+
+                <DataGridColumn TItem="ApiKeyDto"
+                                Field="@nameof(ApiKeyDto.Name)"
+                                Caption="@L["Name"]"
+                                Sortable="true">
+                    <DisplayTemplate>
+                        <strong>
+                            <HighlightText Text="@context.Name" SearchTerm="@FilterText" />
+                        </strong>
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="ApiKeyDto"
+                                Field="@nameof(ApiKeyDto.Description)"
+                                Caption="@L["Description"]">
+                    <DisplayTemplate>
+                        @if (!string.IsNullOrWhiteSpace(context.Description))
+                        {
+                            <span class="text-muted">
+                                <HighlightText Text="@context.Description" SearchTerm="@FilterText" />
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="text-muted fst-italic">-</span>
+                        }
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="ApiKeyDto"
+                                Field="@nameof(ApiKeyDto.Prefix)"
+                                Caption="@L["Prefix"]">
+                    <DisplayTemplate>
+                        <code class="text-secondary">@context.Prefix...</code>
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="ApiKeyDto"
+                                Field="@nameof(ApiKeyDto.IsActive)"
+                                Caption="@L["Status"]">
+                    <DisplayTemplate>
+                        @{
+                            var (badgeColor, icon, text) = GetStatusBadge(context);
+                            var tooltipKey = $"{text}StatusTooltip";
+                            var isExpired = context.ExpirationTime.HasValue && context.ExpirationTime.Value < DateTimeOffset.Now;
+                        }
+
+                        <div class="d-flex align-items-center gap-2">
+                            @if (HasEditPermission && !isExpired)
+                            {
+                                <Switch TValue="bool"
+                                        Checked="@context.IsActive"
+                                        CheckedChanged="@((value) => UpdateIsActiveAsync(context, value))"
+                                        Color="Color.Success"
+                                        aria-label="@string.Format(L["ToggleStatusFor"], context.Name)"
+                                        Tooltip="@L["ToggleActiveStatus"]">
+                                </Switch>
+                            }
+
+                            <Badge Color="@badgeColor"
+                                   Tooltip="@L[tooltipKey]"
+                                   aria-label="@($"{L["Status"]}: {L[text]}")">
+                                <Icon Name="@icon" aria-hidden="true" /> @L[text]
+                            </Badge>
+                        </div>
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="ApiKeyDto"
+                                Field="@nameof(ApiKeyDto.ExpirationTime)"
+                                Caption="@L["ExpirationTime"]"
+                                Sortable="true">
+                    <DisplayTemplate>
+                        @if (context.ExpirationTime.HasValue)
+                        {
+                            var expirationTime = context.ExpirationTime.Value.ToLocalTime();
+                            var isExpired = expirationTime < DateTimeOffset.Now;
+                            var expiresSoon = !isExpired && expirationTime < DateTimeOffset.Now.AddDays(7);
+
+                            <div class="@(isExpired ? "text-danger" : expiresSoon ? "text-warning" : "")">
+                                @expirationTime.ToString("g")
+                                @if (isExpired)
+                                {
+                                    <small class="d-block">(@L["Expired"])</small>
+                                }
+                                else if (expiresSoon)
+                                {
+                                    <small class="d-block">(@L["ExpiresSoon"])</small>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <span class="text-muted">@L["Never"]</span>
+                        }
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="ApiKeyDto"
+                                Field="@nameof(ApiKeyDto.CreationTime)"
+                                Caption="@L["CreationTime"]"
+                                Sortable="true">
+                    <DisplayTemplate>
+                        <small class="text-muted">@context.CreationTime.ToLocalTime().ToString("g")</small>
+                    </DisplayTemplate>
+                </DataGridColumn>
+            </DataGridColumns>
+
+            <LoadingTemplate>
+                <DataGridSkeleton Rows="10" />
+            </LoadingTemplate>
+
+            <EmptyTemplate>
+                <Row Class="justify-content-center align-items-center" Style="min-height: 300px;">
+                    <Column ColumnSize="ColumnSize.IsAuto">
+                        <Div TextAlignment="TextAlignment.Center" Padding="Padding.Is5">
+                            <Div Class="mb-4">
+                                <Icon Name="IconName.Key" IconSize="IconSize.x5" TextColor="TextColor.Muted" />
+                            </Div>
+                            <Heading Size="HeadingSize.Is4">@L["NoApiKeysYet"]</Heading>
+                            <Paragraph TextColor="TextColor.Muted">@L["CreateYourFirstApiKey"]</Paragraph>
+                            @if (HasCreatePermission)
+                            {
+                                <Button Color="Color.Primary" Clicked="OpenCreateModalAsync" Margin="Margin.Is3.FromTop">
+                                    <Icon Name="IconName.Add" /> @L["NewApiKey"]
+                                </Button>
+                            }
+                        </Div>
+                    </Column>
+                </Row>
+            </EmptyTemplate>
+        </DataGrid>
+    </CardBody>
+</Card>
+
+<!-- Modals -->
+<CreateApiKeyModal @ref="CreateModalRef" OnSaved="OnApiKeyCreatedAsync" />
+<EditApiKeyModal @ref="EditModalRef" OnSaved="OnApiKeyUpdatedAsync" />
+<ApiKeyRevealModal @ref="RevealModalRef" />
+<PermissionManagementModal @ref="PermissionModalRef" />

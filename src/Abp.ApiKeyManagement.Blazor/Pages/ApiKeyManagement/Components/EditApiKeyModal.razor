@@ -1,0 +1,93 @@
+@using Abp.ApiKeyManagement.Permissions
+@inherits ApiKeyManagementComponentBase
+
+<Modal @ref="ModalRef" aria-modal="true">
+    <ModalContent Size="ModalSize.Large">
+        <Form>
+            <ModalHeader>
+                <ModalTitle id="edit-modal-title">
+                    <Icon Name="IconName.Edit" aria-hidden="true" /> @L["EditApiKey"]
+                </ModalTitle>
+                <CloseButton Clicked="CloseAsync" aria-label="@L["Close"]" />
+            </ModalHeader>
+            <ModalBody aria-labelledby="edit-modal-title">
+                <Validations @ref="ValidationsRef" Model="@ViewModel" ValidateOnLoad="false">
+                    <Field>
+                        <FieldLabel>@L["Name"]</FieldLabel>
+                        <FieldBody>
+                            <TextEdit Text="@ApiKeyName"
+                                      Disabled="true"
+                                      aria-describedby="name-readonly-help">
+                            </TextEdit>
+                            <FieldHelp id="name-readonly-help">@L["NameCannotBeChanged"]</FieldHelp>
+                        </FieldBody>
+                    </Field>
+
+                    <Validation MessageLocalizer="@LH.Localize">
+                        <Field>
+                            <FieldLabel>@L["Description"]</FieldLabel>
+                            <FieldBody>
+                                <MemoEdit @bind-Text="@ViewModel.Description"
+                                          Placeholder="@L["DescriptionPlaceholder"]"
+                                          Rows="3"
+                                          MaxLength="1000"
+                                          aria-describedby="description-char-count-edit">
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                                </MemoEdit>
+                                <FieldHelp>
+                                    <small id="description-char-count-edit" class="text-muted">
+                                        @string.Format(L["CharactersRemaining"], 1000 - (ViewModel.Description?.Length ?? 0))
+                                    </small>
+                                </FieldHelp>
+                            </FieldBody>
+                        </Field>
+                    </Validation>
+
+                    <Field>
+                        <FieldBody>
+                            <Check TValue="bool" @bind-Checked="@ViewModel.IsActive">
+                                @L["IsActive"]
+                            </Check>
+                            <FieldHelp>@L["IsActiveHelp"]</FieldHelp>
+                        </FieldBody>
+                    </Field>
+
+                    <Validation MessageLocalizer="@LH.Localize">
+                        <Field>
+                            <FieldLabel>@L["ExpirationTime"]</FieldLabel>
+                            <FieldBody>
+                                <DateEdit TValue="DateTimeOffset?"
+                                          @bind-Date="@ViewModel.ExpirationTime"
+                                          InputMode="DateInputMode.DateTime">
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                                </DateEdit>
+                                <FieldHelp>@L["ExpirationTimeHelp"]</FieldHelp>
+                            </FieldBody>
+                        </Field>
+                    </Validation>
+
+                    <Alert Color="Color.Info" Visible="true" Margin="Margin.Is3.FromTop">
+                        <Icon Name="IconName.InfoCircle" />
+                        <AlertMessage>@L["EditingApiKeyNotice"]</AlertMessage>
+                        <AlertDescription>@L["EditingApiKeyNoticeDescription"]</AlertDescription>
+                    </Alert>
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary" Clicked="CloseAsync" Disabled="@IsSaving">
+                    @L["Cancel"]
+                </Button>
+                <Button Color="Color.Primary"
+                        Clicked="SaveAsync"
+                        Loading="@IsSaving"
+                        Disabled="@IsSaving">
+                    <Icon Name="IconName.Save" /> @L["Save"]
+                </Button>
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
